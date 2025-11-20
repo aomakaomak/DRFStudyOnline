@@ -22,3 +22,6 @@ class CourseSerializer(serializers.ModelSerializer):
         return instance.lessons.count()
 
 
+
+
+
