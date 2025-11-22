@@ -7,3 +7,11 @@ class IsModerator(BasePermission):
             return True
 
         return False
+
+
+
+class IsOwner(BasePermission):
+
+    def has_permission(self, request, view):
+
+        return request.user == view.get_object().owner
