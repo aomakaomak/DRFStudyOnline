@@ -4,6 +4,7 @@ from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from users.models import User, Payment
+from users.permissions import IsOwnerOrReadOnly
 from users.serializers import UserSerializer, PaymentSerializer
 
 
@@ -15,7 +16,10 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action == "create":
             return [AllowAny()]
-        return [IsAuthenticated()]
+        else:
+            permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+
+        return [permission() for permission in permission_classes]
 
 
 class PaymentListAPIView(generics.ListAPIView):
