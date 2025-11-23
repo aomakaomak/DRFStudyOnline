@@ -29,14 +29,14 @@ class UserSerializer(serializers.ModelSerializer):
 
         data = super().to_representation(instance)
 
-        request = self.context.get('request', None)
-        user = getattr(request, 'user', None)
+        request = self.context.get("request", None)
+        user = getattr(request, "user", None)
 
         if user and (user.is_staff or user.is_superuser):
             return data
 
         if not user or user.pk != instance.pk:
-            data.pop('last_name', None)
-            data.pop('payments', None)
+            data.pop("last_name", None)
+            data.pop("payments", None)
 
         return data
