@@ -5,14 +5,19 @@ from materials.models import Course, Lesson
 from materials.permissions import IsModerator, IsOwner
 from materials.serializers import CourseSerializer, LessonSerializer
 
+
 class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
 
     def get_permissions(self):
-        if self.action == 'create' or self.action == 'destroy':
+        if self.action == "create" or self.action == "destroy":
             self.permission_classes = [IsAuthenticated, IsOwner]
-        elif self.action == 'list' or self.action == 'update' or self.action == 'retrieve':
+        elif (
+            self.action == "list"
+            or self.action == "update"
+            or self.action == "retrieve"
+        ):
             self.permission_classes = [IsAuthenticated, IsModerator | IsOwner]
         return [permission() for permission in self.permission_classes]
 
@@ -53,4 +58,3 @@ class LessonUpdateAPIView(generics.UpdateAPIView):
 class LessonDestroyAPIView(generics.DestroyAPIView):
     queryset = Lesson.objects.all()
     permission_classes = [IsAuthenticated, IsOwner]
-
