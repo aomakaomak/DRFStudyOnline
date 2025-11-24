@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 
+from users.models import User
+
 
 class Course(models.Model):
     title = models.CharField(max_length=150, verbose_name="название")
@@ -48,3 +50,20 @@ class Lesson(models.Model):
     class Meta:
         verbose_name = "урок"
         verbose_name_plural = "уроки"
+
+
+class Subscription(models.Model):
+    title = models.CharField(max_length=50, verbose_name='Название подписки')
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="subscriptions", verbose_name="Пользователь"
+    )
+    course = models.ForeignKey(
+        Course, on_delete=models.CASCADE, related_name="subscriptions", verbose_name="Курс"
+    )
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "подписка"
+        verbose_name_plural = "подписки"
