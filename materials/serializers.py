@@ -37,3 +37,5 @@ class CourseSerializer(serializers.ModelSerializer):
             return False
 
         return instance.subscriptions.filter(user=user).exists()
+
+
