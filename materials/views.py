@@ -1,7 +1,11 @@
-from rest_framework import viewsets, generics
-from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
 
-from materials.models import Course, Lesson
+from rest_framework import viewsets, generics, status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from materials.models import Course, Lesson, Subscription
 from materials.permissions import IsModerator, IsOwner
 from materials.serializers import CourseSerializer, LessonSerializer
 
@@ -58,3 +62,43 @@ class LessonUpdateAPIView(generics.UpdateAPIView):
 class LessonDestroyAPIView(generics.DestroyAPIView):
     queryset = Lesson.objects.all()
     permission_classes = [IsAuthenticated, IsOwner]
+
+
+class SubscriptionAPIView(APIView):
+    """
+    POST /api/subscriptions/
+    body: {"course_id": <id курса>}
+
+    Если подписка была — удаляем и возвращаем message="подписка удалена".
+    Если подписки не было — создаём и возвращаем message="подписка добавлена".
+    """
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        course_id = request.data.get("course_id")
+
+        if course_id is None:
+            return Response(
+                {"detail": "Не передан параметр course_id"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        course_item = get_object_or_404(Course, id=course_id)
+
+        subs_qs = Subscription.objects.filter(user=user, course=course_item)
+
+        if subs_qs.exists():
+            # Подписка существует — удаляем все на всякий случай
+            subs_qs.delete()
+            message = "подписка удалена"
+        else:
+            # Подписки нет — создаём
+            Subscription.objects.create(
+                user=user,
+                course=course_item,
+                title=f"Подписка на курс {course_item.title}"
+            )
+            message = "подписка добавлена"
+
+        return Response({"message": message}, status=status.HTTP_200_OK)
