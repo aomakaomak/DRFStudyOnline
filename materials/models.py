@@ -9,6 +9,12 @@ class Course(models.Model):
     preview = models.ImageField(
         upload_to="courses/previews/", blank=True, null=True, verbose_name="Превью"
     )
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        verbose_name="цена",
+        default=1000
+    )
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
