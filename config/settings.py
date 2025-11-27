@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt",
     "users",
     "materials",
+    "drf_yasg",
 ]
 
 MIDDLEWARE = [
