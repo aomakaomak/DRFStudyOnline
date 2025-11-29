@@ -10,6 +10,8 @@ from materials.paginators import MaterialsPaginator
 from materials.permissions import IsModerator, IsOwner
 from materials.serializers import CourseSerializer, LessonSerializer
 
+from materials.tasks import send_course_update_email
+
 
 class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
@@ -31,6 +33,10 @@ class CourseViewSet(viewsets.ModelViewSet):
         new_course = serializer.save()
         new_course.owner = self.request.user
         new_course.save()
+
+    def perform_update(self, serializer):
+        updated_course = serializer.save()
+        send_course_update_email.delay(updated_course.id)
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
