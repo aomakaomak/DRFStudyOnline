@@ -36,6 +36,16 @@ class Payment(models.Model):
         (TRANSFER, "банковский перевод"),
     ]
 
+    STATUS_PENDING = "pending"
+    STATUS_PAID = "paid"
+    STATUS_CANCELED = "canceled"
+
+    STATUS_CHOICES = [
+        (STATUS_PENDING, "ожидает оплаты"),
+        (STATUS_PAID, "оплачен"),
+        (STATUS_CANCELED, "отменён"),
+    ]
+
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -64,6 +74,38 @@ class Payment(models.Model):
     )
     payment_method = models.CharField(
         max_length=20, choices=PAYMENT_METHOD_CHOICES, verbose_name="Метод оплаты"
+    )
+
+    # --- Stripe-поля ---
+    stripe_product_id = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name="ID продукта в Stripe",
+    )
+    stripe_price_id = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name="ID цены в Stripe",
+    )
+    stripe_session_id = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        verbose_name="ID сессии Checkout в Stripe",
+    )
+    payment_url = models.URLField(
+        max_length=500,
+        blank=True,
+        null=True,
+        verbose_name="Ссылка на оплату (Stripe Checkout)",
+    )
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default=STATUS_PENDING,
+        verbose_name="Статус платежа",
     )
 
     def __str__(self):
