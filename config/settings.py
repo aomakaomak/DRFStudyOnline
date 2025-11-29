@@ -110,11 +110,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
-
+TIME_ZONE = "Europe/Moscow"
+USE_TZ = True
 USE_I18N = True
 
-USE_TZ = True
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_ENABLE_UTC = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -159,3 +160,11 @@ EMAIL_USE_SSL = True
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
+
+
+CELERY_BEAT_SCHEDULE = {
+    "deactivate_inactive_users_daily": {
+        "task": "users.tasks.deactivate_inactive_users",
+        "schedule": timedelta(minutes=1),
+    },
+}
