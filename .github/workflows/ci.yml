@@ -6,6 +6,34 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    # Поднимаем PostgreSQL как сервис для тестов
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: ${{ secrets.DB_NAME }}
+          POSTGRES_USER: ${{ secrets.DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        ports:
+          - 5432:5432
+        # Ждём, пока Postgres будет готов
+        options: >-
+          --health-cmd="pg_isready -U ${{ secrets.DB_USER }} -d ${{ secrets.DB_NAME }}"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    # Эти переменные будут доступны manage.py в раннере
+    env:
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      NAME: ${{ secrets.NAME }}
+      USER: ${{ secrets.USER }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+      HOST: localhost
+      PORT: 5432
+      DEBUG: "True"
+
+
     steps:
       - name: Check out code
         uses: actions/checkout@v3
@@ -78,5 +106,3 @@ jobs:
           ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
           sudo systemctl restart myapp.service
           EOF
-
-#просто строка для коммитаdkdk
