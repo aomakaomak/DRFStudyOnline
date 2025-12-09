@@ -168,3 +168,5 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": timedelta(minutes=1),
     },
 }
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
