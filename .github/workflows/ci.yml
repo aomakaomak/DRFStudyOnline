@@ -79,3 +79,4 @@ jobs:
           sudo systemctl restart myapp.service
           EOF
 
+#просто строка для коммита
