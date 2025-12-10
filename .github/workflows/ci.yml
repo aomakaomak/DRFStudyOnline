@@ -96,4 +96,5 @@ jobs:
             
             EOF
             sudo docker compose down --rmi all --volumes --remove-orphans || true
+            sudo docker rm -f drfstudyonline-redis-1 || true
             sudo docker compose up --build -d
