@@ -1,42 +1,22 @@
 FROM python:3.13-slim
 
-# Рабочая директория
 WORKDIR /app
 
-# Устанавливаем системные зависимости
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libpq-dev \
-    curl \
+RUN apt-get update \
+    && apt-get install -y gcc libpq-dev \
+    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# -----------------------------
-#  УСТАНОВКА POETRY
-# -----------------------------
-ENV POETRY_VERSION=1.8.3
-ENV POETRY_HOME=/opt/poetry
-ENV PATH="$POETRY_HOME/bin:$PATH"
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN curl -sSL https://install.python-poetry.org | python3 -
-
-# Poetry не создаёт виртуальное окружение внутри контейнера
-RUN poetry config virtualenvs.create false
-
-# -----------------------------
-#  КОПИРУЕМ ФАЙЛЫ ПОЭТРИ
-# -----------------------------
-COPY pyproject.toml poetry.lock* ./
-
-# Устанавливаем зависимости (prod + dev при необходимости)
-RUN poetry install --no-root
-
-# -----------------------------
-#  КОПИРУЕМ ВСЁ ПРИЛОЖЕНИЕ
-# -----------------------------
 COPY . .
 
-# Открываем Django порт
+ENV SECRET_KEY="django-insecure-=kdvj_88e6_lhf#kx*3m2f03^8h551(6%*r$&72kuzo!d8)u9!"
+ENV CELERY_BROKER_URL="redis://redis:6379/0"
+ENV CELERY_BACKEND="redis://redis:6379/0"
+
+RUN mkdir -p /app/media
+
 EXPOSE 8000
 
-# Команда по умолчанию (будет переопределена в docker-compose)
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

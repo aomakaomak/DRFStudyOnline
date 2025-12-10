@@ -1,0 +1,26 @@
+
+ci
+
+cat << 'EOF' >> .env   ==     cat > .env << 'EOF'
+
+
+
+DATABASE_NAME=${{ secrets.NAME }}
+DATABASE_USER=${{ secrets.USER }}
+DATABASE_PASSWORD=${{ secrets.PASSWORD }}
+DATABASE_HOST=${{ secrets.DATABASE_HOST }}
+DATABASE_PORT=${{ secrets.DATABASE_PORT }}
+
+NAME=${{ secrets.NAME }}
+USER=${{ secrets.USER }}
+PASSWORD=${{ secrets.PASSWORD }}
+HOST=${{ secrets.DATABASE_HOST }}
+PORT=${{ secrets.DATABASE_PORT }}
+
+
+container_name: django_applic
+container_name: redis-applic
+
+Добавил  sudo docker rm -f drfstudyonline-redis-1 || true
+
+[ push, pull_request ]    push
