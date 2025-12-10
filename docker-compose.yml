@@ -2,7 +2,7 @@ services:
   web:
     build:
       context: .
-    container_name: django_appli
+    container_name: django_applic
     command: sh -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8000"
     volumes:
       - .:/app
@@ -39,7 +39,7 @@ services:
 
   redis:
     image: redis:7
-    container_name: redis-appli
+    container_name: redis-applic
     volumes:
       - redis_data:/data
     env_file:
