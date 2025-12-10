@@ -22,3 +22,5 @@ container_name: django_applic
 container_name: redis-applic
 
 Добавил  sudo docker rm -f drfstudyonline-redis-1 || true
+
+[ push, pull_request ]    push
