@@ -96,6 +96,6 @@ jobs:
             
             
             EOF
-            sudo docker compose down --rmi all --volumes --remove-orphans || true
-            sudo docker compose rm
+#            sudo docker compose down --rmi all --volumes --remove-orphans || true
+#            sudo docker compose rm
             sudo docker compose up --build -d
