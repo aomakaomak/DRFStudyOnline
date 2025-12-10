@@ -66,7 +66,6 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-#    needs: test
 
     steps:
       - name: Deploy to YandexCloud VM
@@ -96,6 +95,4 @@ jobs:
             
             
             EOF
-#            sudo docker compose down --rmi all --volumes --remove-orphans || true
-#            sudo docker compose rm
             sudo docker compose up --build -d
