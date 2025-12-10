@@ -44,29 +44,29 @@ services:
     env_file:
       - ./.env
 
-  celery:
-    build: ./
-    command: celery -A config worker --loglevel=INFO
-    volumes:
-      - ./:/app
-    env_file:
-      - .env
-    depends_on:
-      - web
-      - redis
-      - db
-
-  celery-beat:
-    build: ./
-    command: celery -A config beat --loglevel=INFO -S django
-    volumes:
-      - ./:/app
-    env_file:
-      - .env
-    depends_on:
-      - web
-      - redis
-      - db
+#  celery:
+#    build: ./
+#    command: celery -A config worker --loglevel=INFO
+#    volumes:
+#      - ./:/app
+#    env_file:
+#      - .env
+#    depends_on:
+#      - web
+#      - redis
+#      - db
+#
+#  celery-beat:
+#    build: ./
+#    command: celery -A config beat --loglevel=INFO -S django
+#    volumes:
+#      - ./:/app
+#    env_file:
+#      - .env
+#    depends_on:
+#      - web
+#      - redis
+#      - db
 
 
 
