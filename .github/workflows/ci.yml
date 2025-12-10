@@ -72,29 +72,29 @@ jobs:
       - name: Deploy to YandexCloud VM
         uses: appleboy/ssh-action@v1.0.3
         with:
-        host: ${{ secrets.SERVER_IP }}
-        username: ${{ secrets.SSH_USER }}
-        key: ${{ secrets.SSH_KEY }}
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
 
-        script: |  
-          cd ${{ secrets.DEPLOY_DIR }}
-          git pull origin hometask352
-          cat < 'EOF' > .env
-          SECRET_KEY=${{ secrets.SECRET_KEY }}
-          DATABASE_NAME=${{ secrets.NAME }}
-          DATABASE_USER=${{ secrets.USER }}
-          DATABASE_PASSWORD=${{ secrets.PASSWORD }}
-          DATABASE_HOST=${{ secrets.DATABASE_HOST }}
-          DATABASE_PORT=${{ secrets.DATABASE_PORT }}
-          
-          # Django
-          DEBUG=True
-          
-          # Stripe
-          STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}
-          STRIPE_PUBLISHABLE_KEY=${{ secrets.STRIPE_PUBLISHABLE_KEY }}
-          
-          
-          EOF
-          sudo docker compose down || true
-          sudo docker compose up --build -d
+          script: |  
+            cd ${{ secrets.DEPLOY_DIR }}
+            git pull origin hometask352
+            cat < 'EOF' > .env
+            SECRET_KEY=${{ secrets.SECRET_KEY }}
+            DATABASE_NAME=${{ secrets.NAME }}
+            DATABASE_USER=${{ secrets.USER }}
+            DATABASE_PASSWORD=${{ secrets.PASSWORD }}
+            DATABASE_HOST=${{ secrets.DATABASE_HOST }}
+            DATABASE_PORT=${{ secrets.DATABASE_PORT }}
+            
+            # Django
+            DEBUG=True
+            
+            # Stripe
+            STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}
+            STRIPE_PUBLISHABLE_KEY=${{ secrets.STRIPE_PUBLISHABLE_KEY }}
+            
+            
+            EOF
+            sudo docker compose down || true
+            sudo docker compose up --build -d
