@@ -80,7 +80,7 @@ jobs:
             cd ${{ secrets.DEPLOY_DIR }}
             git pull origin hometask352
             cat < 'EOF' > .env
-            SECRET_KEY=${{ secrets.SECRET_KEY }}
+            SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}
             DATABASE_NAME=${{ secrets.NAME }}
             DATABASE_USER=${{ secrets.USER }}
             DATABASE_PASSWORD=${{ secrets.PASSWORD }}
